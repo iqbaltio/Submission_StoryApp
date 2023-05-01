@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">StoryApp</string>
+    <string name="register">Don\'t have account?</string>
+    <string name="namauser">Nama User</string>
+    <string name="lorem">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</string>
+    <string name="is_user_logged_in">Succesfully Log In</string>
+    <string name="timeout">Timeout</string>
+    <string name="reload">Reload</string>
+</resources>

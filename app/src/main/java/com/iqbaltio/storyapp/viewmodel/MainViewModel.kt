@@ -31,13 +31,16 @@ class MainViewModel(private val repo: StoryAppRepository) : ViewModel() {
     }
 
     fun getStory() : LiveData<PagingData<ListStory>>{
-        return repo.getStory().cachedIn(viewModelScope)
+        return repo.getStory()
     }
 
-    fun addStory(token: String, file: MultipartBody.Part, description: RequestBody) =
-        repo.addStory(token, file, description)
+    fun addStory(token: String, file: MultipartBody.Part, description: RequestBody, lat: Double?, lon: Double?) =
+        repo.addStory(token, file, description, lat, lon)
 
     fun getUser(): LiveData<UserModels> {
         return repo.getUserData()
     }
+
+    fun getStoryLocation(token: String) =
+        repo.getStoryLoc(token)
 }

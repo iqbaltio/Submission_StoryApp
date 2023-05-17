@@ -6,4 +6,10 @@
     <string name="is_user_logged_in">Succesfully Log In</string>
     <string name="timeout">Timeout</string>
     <string name="reload">Reload</string>
+    <string name="title_activity_maps">MapsActivity</string>
+    <string name="img_preview">Image preview</string>
+    <string name="mainstory_activity">Story</string>
+    <string name="addstory_activity">Add Story</string>
+    <string name="detailstory_activity">Detail Story</string>
+    <string name="mapstory_activity">Story Location</string>
 </resources>

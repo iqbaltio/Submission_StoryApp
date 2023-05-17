@@ -25,7 +25,7 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        supportActionBar?.title = "Story"
+        supportActionBar?.title = getString(R.string.mainstory_activity)
 
         adaptor = StoryAdapter()
         with(binding.rvStory){
@@ -57,6 +57,9 @@ class MainActivity : AppCompatActivity() {
                 val loginSession = LoginSession(this)
                 loginSession.logoutSession()
                 mainViewModel.logout()
+            }
+            R.id.action_maps -> {
+                startActivity(Intent(this, MapsActivity::class.java))
             }
         }
         return true

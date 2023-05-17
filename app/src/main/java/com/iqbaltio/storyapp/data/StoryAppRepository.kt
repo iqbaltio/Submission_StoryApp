@@ -68,13 +68,26 @@ class StoryAppRepository(private val preferences: UserPreferences, private val a
     fun addStory(
         token: String,
         file: MultipartBody.Part,
-        description: RequestBody
+        description: RequestBody,
+        lat: Double?,
+        lon: Double?
     ): LiveData<Result<FileUploadResponse>> = liveData {
         emit(Result.Loading)
         try {
-            val response = apiService.uploadImage(token, file, description)
+            val response = apiService.uploadImage(token, file, description, lat, lon)
             emit(Result.Success(response))
         } catch (e: java.lang.Exception) {
+            Log.d("Signup", e.message.toString())
+            emit(Result.Error(e.message.toString()))
+        }
+    }
+
+    fun getStoryLoc(token: String): LiveData<Result<AllStoriesResponse>> = liveData {
+        emit(Result.Loading)
+        try {
+            val response = apiService.getStoriesLocation(token, 1)
+            emit(Result.Success(response))
+        } catch (e: Exception) {
             Log.d("Signup", e.message.toString())
             emit(Result.Error(e.message.toString()))
         }

@@ -7,7 +7,6 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
-import androidx.lifecycle.ViewModelProvider
 import com.iqbaltio.storyapp.databinding.ActivityRegisterBinding
 import com.iqbaltio.storyapp.viewmodel.MainViewModel
 import com.iqbaltio.storyapp.Result
@@ -87,19 +86,29 @@ class RegisterActivity : AppCompatActivity() {
     }
 
     private fun setupAnimation() {
-        ObjectAnimator.ofFloat(binding.ivRegisterLogo, View.TRANSLATION_X, -30f, 30f).apply {
+        val logo = binding.ivRegisterLogo
+        val label = binding.tvRegisLabel
+        val name = binding.nameTextInputLayout
+        val email = binding.emailTextInputLayout
+        val password = binding.passwordTextInputLayout
+        val login = binding.btnSubmit
+
+        ObjectAnimator.ofFloat(logo, View.TRANSLATION_X, -30f, 30f).apply {
             duration = 6000
             repeatCount = ObjectAnimator.INFINITE
             repeatMode = ObjectAnimator.REVERSE
         }.start()
-        val label = ObjectAnimator.ofFloat(binding.tvRegisLabel, View.ALPHA, 1f).setDuration(400)
-        val name = ObjectAnimator.ofFloat(binding.nameTextInputLayout, View.ALPHA, 1f).setDuration(400)
-        val email = ObjectAnimator.ofFloat(binding.emailTextInputLayout, View.ALPHA, 1f).setDuration(500)
-        val password = ObjectAnimator.ofFloat(binding.passwordTextInputLayout, View.ALPHA, 1f).setDuration(600)
-        val login = ObjectAnimator.ofFloat(binding.btnSubmit, View.ALPHA, 1f).setDuration(700)
 
         AnimatorSet().apply {
-            playSequentially(label,name,email,password,login)
+            playSequentially(
+                ObjectAnimator.ofFloat(label, View.ALPHA, 1f),
+                ObjectAnimator.ofFloat(name, View.ALPHA, 1f),
+                ObjectAnimator.ofFloat(email, View.ALPHA, 1f),
+                ObjectAnimator.ofFloat(password, View.ALPHA, 1f),
+                ObjectAnimator.ofFloat(login, View.ALPHA, 1f)
+            )
+            duration = 700
+            startDelay = 400
             start()
         }
     }

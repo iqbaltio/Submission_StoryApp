@@ -1,10 +1,10 @@
 package com.iqbaltio.storyapp.activity
 
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
+import com.iqbaltio.storyapp.R
 import com.iqbaltio.storyapp.data.ListStory
 import com.iqbaltio.storyapp.databinding.ActivityDetailBinding
 
@@ -16,7 +16,7 @@ class DetailActivity : AppCompatActivity() {
         binding = ActivityDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        supportActionBar?.title = "Detail Story"
+        supportActionBar?.title = getString(R.string.detailstory_activity)
         val actionbar = supportActionBar
         actionbar?.setDisplayHomeAsUpEnabled(true)
 

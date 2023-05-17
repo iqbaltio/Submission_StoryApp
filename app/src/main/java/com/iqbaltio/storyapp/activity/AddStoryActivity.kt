@@ -1,8 +1,10 @@
 package com.iqbaltio.storyapp.activity
 
+import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.BitmapFactory
+import android.location.Location
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -13,13 +15,12 @@ import androidx.activity.viewModels
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
-import com.iqbaltio.storyapp.createTempFile
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
+import com.iqbaltio.storyapp.*
 import com.iqbaltio.storyapp.data.ViewModelFactory
 import com.iqbaltio.storyapp.databinding.ActivityAddStoryBinding
-import com.iqbaltio.storyapp.reduceImageSize
 import com.iqbaltio.storyapp.viewmodel.MainViewModel
-import com.iqbaltio.storyapp.uriToFile
-import com.iqbaltio.storyapp.Result
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
@@ -29,7 +30,10 @@ import java.io.File
 class AddStoryActivity : AppCompatActivity() {
     private lateinit var binding : ActivityAddStoryBinding
     private lateinit var photoPath: String
+    private lateinit var fusedLoc: FusedLocationProviderClient
     private var getFile: File? = null
+    private var lat: Double? = null
+    private var lon: Double? = null
     private val mainViewModel by viewModels<MainViewModel> { ViewModelFactory.getInstance(this) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,7 +41,7 @@ class AddStoryActivity : AppCompatActivity() {
         binding = ActivityAddStoryBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        supportActionBar?.title = "Add Story"
+        supportActionBar?.title = getString(R.string.addstory_activity)
         val actionbar = supportActionBar
         actionbar?.setDisplayHomeAsUpEnabled(true)
 
@@ -50,7 +54,28 @@ class AddStoryActivity : AppCompatActivity() {
             btnAddGallery.setOnClickListener { bukaGaleri() }
             buttonAdd.setOnClickListener { uploadStory() }
         }
+        getMyLocation()
+    }
 
+    private fun getMyLocation() {
+        if (ContextCompat.checkSelfPermission(this.applicationContext, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            fusedLoc = LocationServices.getFusedLocationProviderClient(this)
+            fusedLoc.lastLocation.addOnSuccessListener { location: Location? ->
+                if (location != null) {
+                    lat = location.latitude
+                    lon = location.longitude
+                    Toast.makeText(this, "Saved Location", Toast.LENGTH_SHORT).show()
+                } else {
+                    Toast.makeText(this, "Tidak ada lokasi", Toast.LENGTH_SHORT).show()
+                }
+            }
+        } else {
+            requestPermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION);(Manifest.permission.ACCESS_COARSE_LOCATION)
+        }
+    }
+
+    private val requestPermissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted: Boolean ->
+        if (isGranted) getMyLocation()
     }
 
     private fun permissionStatus() = REQUIRED_PERMISSIONS.all {
@@ -110,7 +135,7 @@ class AddStoryActivity : AppCompatActivity() {
             val reqImgFile = reduceImageSize(file).asRequestBody("image/*".toMediaTypeOrNull())
             val desc = "${binding.edAddDescription.text}".toRequestBody("text/plain".toMediaTypeOrNull())
             val imageMultipart: MultipartBody.Part = MultipartBody.Part.createFormData("photo", file.name, reqImgFile)
-            mainViewModel.addStory(token, imageMultipart, desc).observe(this@AddStoryActivity) {
+            mainViewModel.addStory(token, imageMultipart, desc, lat, lon).observe(this@AddStoryActivity) {
                 when (it) {
                     is Result.Success -> {
                         startActivity(Intent(this, MainActivity::class.java))

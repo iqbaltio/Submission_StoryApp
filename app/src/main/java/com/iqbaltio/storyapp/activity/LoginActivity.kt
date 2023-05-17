@@ -101,19 +101,29 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun setupAnimation() {
-        ObjectAnimator.ofFloat(binding.ivLoginLogo, View.TRANSLATION_X, -30f, 30f).apply {
+        val logo = binding.ivLoginLogo
+        val label = binding.tvLoginLabel
+        val email = binding.emailTextInputLayout
+        val password = binding.passwordTextInputLayout
+        val login = binding.btnSubmit
+        val register = binding.btnRegister
+
+        ObjectAnimator.ofFloat(logo, View.TRANSLATION_X, -30f, 30f).apply {
             duration = 6000
             repeatCount = ObjectAnimator.INFINITE
             repeatMode = ObjectAnimator.REVERSE
         }.start()
-        val label = ObjectAnimator.ofFloat(binding.tvLoginLabel, View.ALPHA, 1f).setDuration(400)
-        val email = ObjectAnimator.ofFloat(binding.emailTextInputLayout, View.ALPHA, 1f).setDuration(400)
-        val password = ObjectAnimator.ofFloat(binding.passwordTextInputLayout, View.ALPHA, 1f).setDuration(500)
-        val login = ObjectAnimator.ofFloat(binding.btnSubmit, View.ALPHA, 1f).setDuration(600)
-        val register = ObjectAnimator.ofFloat(binding.btnRegister, View.ALPHA, 1f).setDuration(700)
 
         AnimatorSet().apply {
-            playSequentially(label,email,password,login,register)
+            playSequentially(
+                ObjectAnimator.ofFloat(label, View.ALPHA, 1f),
+                ObjectAnimator.ofFloat(email, View.ALPHA, 1f),
+                ObjectAnimator.ofFloat(password, View.ALPHA, 1f),
+                ObjectAnimator.ofFloat(login, View.ALPHA, 1f),
+                ObjectAnimator.ofFloat(register, View.ALPHA, 1f)
+            )
+            duration = 700
+            startDelay = 400
             start()
         }
     }
